@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9f8c5ca9-3f07-4bb8-a57a-d031706bd6c0" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="udp" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" path="/usr/local/Cellar/go/1.13.4/libexec" />
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="false" />
+    <option name="useGoPathFromSystemEnvironment" value="false" />
+  </component>
+  <component name="MavenRunner">
+    <option name="jreName" value="1.8" />
+  </component>
+  <component name="ProjectId" id="1ZFF1v7XkkngIWQV0ImTve3RYFn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1583811201416" />
+    <property name="configurable.Global.GOPATH.is.expanded" value="true" />
+    <property name="configurable.Module.GOPATH.is.expanded" value="false" />
+    <property name="configurable.Project.GOPATH.is.expanded" value="true" />
+    <property name="go.gopath.indexing.explicitly.defined" value="true" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/device" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/tool" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="go build icc.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="udp" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/icc.go" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="udp" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/main.go" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9f8c5ca9-3f07-4bb8-a57a-d031706bd6c0" name="Default Changelist" comment="" />
+      <created>1575867347291</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1575867347291</updated>
+      <workItem from="1575867350703" duration="3245000" />
+      <workItem from="1576033246039" duration="1855000" />
+      <workItem from="1577340891582" duration="8821000" />
+      <workItem from="1578362469678" duration="19415000" />
+      <workItem from="1578409907354" duration="4175000" />
+      <workItem from="1578447424199" duration="6810000" />
+      <workItem from="1578470392981" duration="382000" />
+      <workItem from="1578470902083" duration="320000" />
+      <workItem from="1578471567093" duration="29761000" />
+      <workItem from="1578809616092" duration="6123000" />
+      <workItem from="1578816826078" duration="8836000" />
+      <workItem from="1578903783363" duration="5343000" />
+      <workItem from="1579052288843" duration="10074000" />
+      <workItem from="1580709425115" duration="4000" />
+      <workItem from="1582689498681" duration="14000000" />
+      <workItem from="1582870925213" duration="1064000" />
+      <workItem from="1582874659291" duration="1147000" />
+      <workItem from="1582979925038" duration="5012000" />
+      <workItem from="1583299320588" duration="669000" />
+      <workItem from="1583388642218" duration="6114000" />
+      <workItem from="1584426729066" duration="46000" />
+      <workItem from="1585039527389" duration="477000" />
+      <workItem from="1585121261390" duration="23000" />
+      <workItem from="1585282894265" duration="370000" />
+      <workItem from="1585286671848" duration="545000" />
+      <workItem from="1585544807021" duration="21000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.configurationType" implementationName="GoApplicationRunConfiguration" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="320" y="128" key="#GOPATH" timestamp="1584427114693">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="320" y="128" key="#GOPATH/0.23.1440.877@0.23.1440.877" timestamp="1584427114693" />
+    <state x="320" y="128" key="#Notifications" timestamp="1585121317560">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="320" y="128" key="#Notifications/0.23.1440.877@0.23.1440.877" timestamp="1585121317560" />
+    <state x="397" y="294" key="com.intellij.ide.util.TipDialog" timestamp="1584426754512">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="397" y="294" key="com.intellij.ide.util.TipDialog/0.23.1440.877@0.23.1440.877" timestamp="1584426754512" />
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Python 3.7 interpreter library</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>udp</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
