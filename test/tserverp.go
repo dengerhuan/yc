@@ -8,6 +8,15 @@ import (
 	czmq "github.com/zeromq/goczmq"
 )
 
+//https://github.com/zeromq/goczmq
+/**
+
+
+需要安装配置
+libsodium
+libzmq
+czmq
+*/
 
 func main() {
 	endpoint := "tcp://127.0.0.1:5556"
