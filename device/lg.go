@@ -31,14 +31,10 @@ var (
 )
 
 func init() {
-	throttlebAtion.Action = "forward"
-
-	streetingAction.Action = "right"
-
-	stopAction.Action = "stop"
-
-	SmoothAction.Action = "smooth"
-	SmoothAction.Value = 100
+	throttlebAtion = &Vehicle{Action: "forward"}
+	streetingAction = &Vehicle{Action: "right"}
+	stopAction = &Vehicle{Action: "stop"}
+	SmoothAction = &Vehicle{Action: "smooth", Value: 100}
 }
 
 // DATA0=01/02/03/04 对应于PRND档位
