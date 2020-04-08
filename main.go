@@ -26,7 +26,7 @@ func init() {
 	flag.StringVar(&host, "host", "192.168.1.100", "host ip")
 	flag.StringVar(&server, "server", "127.0.0.1", "remote server ip")
 	flag.IntVar(&port, "port", 38302, "remote server port")
-	flag.StringVar(&endpoint, "endpoint", "tcp://127.0.0.1:5556", "vehicle zmq endpoint")
+	flag.StringVar(&endpoint, "endpoint", "tcp://127.0.0.1:5555", "vehicle zmq endpoint")
 }
 
 /**

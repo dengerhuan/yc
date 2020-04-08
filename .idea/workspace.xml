@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9f8c5ca9-3f07-4bb8-a57a-d031706bd6c0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/device/lg.go" beforeDir="false" afterPath="$PROJECT_DIR$/device/lg.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nrpc/zmq.go" beforeDir="false" afterPath="$PROJECT_DIR$/nrpc/zmq.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +52,7 @@
     <property name="configurable.Project.GOPATH.is.expanded" value="true" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/test" />
+    <property name="last_opened_file_path" value="$USER_HOME$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="SDKs" />
@@ -188,26 +186,26 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="320" y="128" key="#Notifications/0.23.1440.877@0.23.1440.877" timestamp="1585121317560" />
-    <state x="455" y="271" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1586263611033">
+    <state x="455" y="271" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1586327885378">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="455" y="271" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1586263611033" />
-    <state width="1398" height="206" key="GridCell.Tab.0.bottom" timestamp="1586312327859">
+    <state x="455" y="271" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1586327885378" />
+    <state width="1398" height="239" key="GridCell.Tab.0.bottom" timestamp="1586327988379">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="206" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1586312327859" />
-    <state width="1398" height="206" key="GridCell.Tab.0.center" timestamp="1586312327858">
+    <state width="1398" height="239" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1586327988379" />
+    <state width="1398" height="239" key="GridCell.Tab.0.center" timestamp="1586327988378">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="206" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1586312327858" />
-    <state width="1398" height="206" key="GridCell.Tab.0.left" timestamp="1586312327858">
+    <state width="1398" height="239" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1586327988378" />
+    <state width="1398" height="239" key="GridCell.Tab.0.left" timestamp="1586327988378">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="206" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1586312327858" />
-    <state width="1398" height="206" key="GridCell.Tab.0.right" timestamp="1586312327859">
+    <state width="1398" height="239" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1586327988378" />
+    <state width="1398" height="239" key="GridCell.Tab.0.right" timestamp="1586327988379">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="206" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1586312327859" />
+    <state width="1398" height="239" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1586327988379" />
     <state x="100" y="123" width="1240" height="677" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1586313051206">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
