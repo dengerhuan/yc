@@ -3,7 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="9f8c5ca9-3f07-4bb8-a57a-d031706bd6c0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/tserverp.go" beforeDir="false" afterPath="$PROJECT_DIR$/test/tserverp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/device/lg.go" beforeDir="false" afterPath="$PROJECT_DIR$/device/lg.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/tools.go" beforeDir="false" afterPath="$PROJECT_DIR$/nrpc/tools.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/server.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/tclient.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/tclientreq.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/tserver.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/tserverp.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,12 +78,12 @@
       <recent name="$PROJECT_DIR$/tool" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build tclientreq.go">
-    <configuration name="go build server.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Build.go build tserverp.go">
+    <configuration name="go build nrpcc.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="udp" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/test/server.go" />
+      <filePath value="$PROJECT_DIR$/test/nrpcc.go" />
       <directory value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
@@ -114,11 +121,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build nrpcc.go" />
+        <item itemvalue="Go Build.go build tserverp.go" />
         <item itemvalue="Go Build.go build tclientreq.go" />
         <item itemvalue="Go Build.go build tclient.go" />
-        <item itemvalue="Go Build.go build tserverp.go" />
         <item itemvalue="Go Build.go build tserver.go" />
-        <item itemvalue="Go Build.go build server.go" />
       </list>
     </recent_temporary>
   </component>
@@ -186,22 +193,26 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="320" y="128" key="#Notifications/0.23.1440.877@0.23.1440.877" timestamp="1585121317560" />
-    <state width="1398" height="167" key="GridCell.Tab.0.bottom" timestamp="1585647294091">
+    <state x="455" y="271" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1586263611033">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="167" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1585647294091" />
-    <state width="1398" height="167" key="GridCell.Tab.0.center" timestamp="1585647294090">
+    <state x="455" y="271" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1586263611033" />
+    <state width="1398" height="239" key="GridCell.Tab.0.bottom" timestamp="1586267460133">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="167" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1585647294090" />
-    <state width="1398" height="167" key="GridCell.Tab.0.left" timestamp="1585647294089">
+    <state width="1398" height="239" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1586267460133" />
+    <state width="1398" height="239" key="GridCell.Tab.0.center" timestamp="1586267460132">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="167" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1585647294089" />
-    <state width="1398" height="167" key="GridCell.Tab.0.right" timestamp="1585647294090">
+    <state width="1398" height="239" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1586267460132" />
+    <state width="1398" height="239" key="GridCell.Tab.0.left" timestamp="1586267460132">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="167" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1585647294090" />
+    <state width="1398" height="239" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1586267460132" />
+    <state width="1398" height="239" key="GridCell.Tab.0.right" timestamp="1586267460133">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1398" height="239" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1586267460133" />
     <state x="397" y="294" key="com.intellij.ide.util.TipDialog" timestamp="1584426754512">
       <screen x="0" y="23" width="1440" height="877" />
     </state>

@@ -4,29 +4,38 @@ import (
 	"../config"
 	"bytes"
 	"encoding/binary"
+	"encoding/json"
+	"log"
 	"math"
 	"sync"
 )
 
 type LG struct {
-	Wheel  int32
-	Gas    byte
-	Ibreak byte
-	IGear  byte
-	Flag   byte // 1 control 0 out control
+	Wheel  int32 //0-65535
+	Gas    byte  //255 -0
+	Ibreak byte  // 255- 0
+	IGear  byte  //
+	Flag   byte  // 1 control 0 out control
 }
 
 var (
-	mu           sync.RWMutex
-	seq          int32
-	streetingbuf [13]byte
-	throttlebuf  [13]byte
-	ibrakebuf    [13]byte
-	gearbuf      [13]byte
-	feedback     [6]byte // 0 init  1 res  2keeap  2 other
-
-	temporaryWheel int32;
+	mu              sync.RWMutex
+	seq             int32
+	streetingAction *Vehicle //横向
+	throttlebAtion  *Vehicle //纵向
+	smoothAtion     *Vehicle // 缓动
+	gearbuf         [13]byte
+	feedback        [6]byte // 0 init  1 res  2keeap  2 other
+	temporaryWheel  int32
 )
+
+func init() {
+	throttlebAtion.Action = "forward"
+	throttlebAtion.Value = 0
+
+	streetingAction.Action = "left"
+	streetingAction.Value = 0
+}
 
 // DATA0=01/02/03/04 对应于PRND档位
 func (lginfo *LG) Init() {
@@ -38,7 +47,7 @@ func (lginfo *LG) Init() {
 
 /**
 0  -54
- */
+*/
 func (lginfo *LG) Pong(state byte) []byte {
 	_seqbuf := feedback[:]
 	_seqbuf[0] = byte(seq)
@@ -50,17 +59,17 @@ func (lginfo *LG) Pong(state byte) []byte {
 }
 
 func (lginfo *LG) ReadDriver(buf []byte) {
-	read := bytes.NewReader(buf);
+	read := bytes.NewReader(buf)
 	mu.Lock()
 	defer mu.Unlock()
 	//
-	binary.Read(read, binary.LittleEndian, &seq);
-	binary.Read(read, binary.LittleEndian, &temporaryWheel);
-	binary.Read(read, binary.LittleEndian, &lginfo.Gas);
-	binary.Read(read, binary.LittleEndian, &lginfo.Ibreak);
-	binary.Read(read, binary.LittleEndian, &lginfo.IGear);
-	binary.Read(read, binary.LittleEndian, &lginfo.Flag);
-	lginfo.holerSteering();
+	binary.Read(read, binary.LittleEndian, &seq)
+	binary.Read(read, binary.LittleEndian, &temporaryWheel)
+	binary.Read(read, binary.LittleEndian, &lginfo.Gas)
+	binary.Read(read, binary.LittleEndian, &lginfo.Ibreak)
+	binary.Read(read, binary.LittleEndian, &lginfo.IGear)
+	binary.Read(read, binary.LittleEndian, &lginfo.Flag)
+	lginfo.holerSteering()
 	//fmt.Println(lginfo)
 }
 
@@ -77,31 +86,32 @@ func (lginfo *LG) holerSteering() {
 	}
 }
 
+// 横向
 func (lginfo *LG) DoSteering() []byte {
 	mu.RLock()
 	defer mu.RUnlock()
-	// 转换 lg info to +-540
-	_w := float32(lginfo.Wheel)/6.068 - 5400
+
+	// 转换 lg info to +-1000
+	_w := float32(lginfo.Wheel)/32.7675 - 1000
 	_wheel := int16(-_w)
 	// fixed bug limit wheel range
-	if _wheel < -5400 {
-		_wheel = -5400
-	} else if _wheel > 5400 {
-		_wheel = 5400
+	if _wheel < -1000 {
+		_wheel = -1000
+	} else if _wheel > 1000 {
+		_wheel = 1000
 	}
 
-	slice := streetingbuf[:]
+	streetingAction.Value = _wheel
+	action, err := json.Marshal(streetingAction)
 
-	slice[0] = 0x08
-	slice[3] = 0x01
-	slice[4] = 0x12
-
-	slice[5] = lginfo.Flag
-	slice[6] = byte(_wheel >> 8)
-	slice[7] = byte(_wheel)
-	return slice
+	if err != nil {
+		log.Fatal(err)
+		return nil
+	}
+	return action
 }
 
+// 纵向
 func (lginfo *LG) DoThrottle() []byte {
 
 	mu.RLock()
@@ -114,15 +124,15 @@ func (lginfo *LG) DoThrottle() []byte {
 	99 99对应20%  39321
 	FFFF对应100%  65535
 	具体公式 (DATA23-HEX8000)*0.003=油门开度百分比
-	 */
+	*/
 
 	/**
-	 65536-32768/100  约等于  0x147
+	65536-32768/100  约等于  0x147
 
-	 lginfo.gas * 0x147 +0x8000
-	 */
+	lginfo.gas * 0x147 +0x8000
+	*/
 
-	_gas := uint16(255-lginfo.Gas)*0x80 + 0x8000;
+	_gas := uint16(255-lginfo.Gas)*0x80 + 0x8000
 	if lginfo.Gas < config.MAXTHROTTLE {
 		_gas = 0xc000
 	}
@@ -146,57 +156,33 @@ func (lginfo *LG) DoThrottle() []byte {
 	return slice
 
 }
-func (lginfo *LG) DoBrake() []byte {
+
+// 档位没变化是发 0
+func (lginfo *LG) DoGear() int8 {
 
 	mu.RLock()
 	defer mu.RUnlock()
 
-	/**
-	8C 00对应0m/ss; // 140
-	82 00对应 0.5m/ss;
-	78 00对应1m/ss;
-	6E 00对应1.5m/ss;
-	64 00对应2m/ss
-	28 00对应5m/ss  40
-	 */
-	slice := ibrakebuf[:]
-
-	slice[0] = 0x08
-
-	slice[3] = 0x02
-	slice[4] = 0xBF
-	slice[6] = 0x82
-	slice[7] = 0x80
-	slice[8] = 0x12
-	slice[10] = 0x01
-
-	//ss := lginfo.Ibreak / 255 * 100
-	ibreak := float32(lginfo.Ibreak)/255*100 + 0x28;
-
-
-	var gea byte = byte(ibreak)
-
-	slice[11] = gea
-
-
-
-	return slice
-
-}
-
-func (lginfo *LG) DoGear() []byte {
-
-	mu.RLock()
-	defer mu.RUnlock()
 	//送ID 501 DATA0=01/02/03/04
 
-	// DATA0=01/02/03/04 对应于PRND档位
-	slice := gearbuf[:]
-	slice[0] = 0x08
-	slice[3] = 0x05
-	slice[4] = 0x01
+	// DATA0=01/02/03/04 对应于P1 R2 N3 D4档位
 
-	slice[5] = lginfo.Ibreak
+	switch lginfo.IGear {
 
-	return slice
+	// 0 N 3
+	// 64 R 2
+	// 1 4 16 // 1 3 5 -D 4
+	// 2 8 32 // 2 4 6 -P 1
+	case 0:
+		return 3
+	case 64:
+		return 2
+	case 1, 4, 16:
+		return 4
+	case 2, 8, 32:
+		return 1
+	default:
+		return 0
+	}
+
 }

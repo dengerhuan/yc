@@ -2,13 +2,13 @@ package main
 
 // version cuc
 import (
-	"net"
-	"fmt"
 	"./device"
+	"./nrpc"
 	"./tool"
-	"./rpc"
-	"time"
 	"flag"
+	"fmt"
+	"net"
+	"time"
 )
 
 var (
@@ -17,12 +17,14 @@ var (
 	host       string
 	port       int
 	server     string
+	endpoint   string
 )
 
 func init() {
 	flag.StringVar(&host, "host", "192.168.1.100", "host ip")
 	flag.StringVar(&server, "server", "127.0.0.1", "remote server ip")
 	flag.IntVar(&port, "port", 38302, "remote server port")
+	flag.StringVar(&endpoint, "endpoint", "tcp://127.0.0.1:5556", "vehicle zmq endpoint")
 }
 
 //  time out timer ==300
@@ -44,21 +46,42 @@ func timeOutHandler() {
 	}
 }
 
-func writeToVehicle(conn *net.UDPConn) {
+// customer change
+func writeToVehicle(conn *nrpc.Zmq) {
 
-	ticket := tool.NewInterval(20);
+	//
+	ticket := tool.NewInterval(50)
 	for {
 		select {
 		case <-ticket:
-			conn.Write(lginfo.DoSteering())
 
-			if lginfo.Ibreak < 255 {
-				conn.Write(lginfo.DoBrake())
-			}
+			conn.SendAndReceive([][]byte{})
 
-			if lginfo.Gas < 255 {
-				conn.Write(lginfo.DoThrottle())
-			}
+			// check gear
+			// check  flag
+			//
+
+			// 检查档位信息， 如果反馈nil 说明 档位没有变化
+			// 档位 返回 135  go forward do smooth
+			// 档位 返回 N 缓慢 停下
+			//  档位 返回 P 档 急停
+			//  横向控制 不受档位变化影响
+
+			// 纵向控制 收影响
+			// check gear {
+			//  go  them smooth
+			//  else
+			// nil go on
+			//}
+			//conn.Write(lginfo.DoSteering())
+			//
+			//if lginfo.Ibreak < 255 {
+			//	conn.Write(lginfo.DoBrake())
+			//}
+			//
+			//if lginfo.Gas < 255 {
+			//	conn.Write(lginfo.DoThrottle())
+			//}
 
 			//conn.Write(lginfo.DoGear())
 		}
@@ -67,49 +90,33 @@ func writeToVehicle(conn *net.UDPConn) {
 
 /**
 
- lg  can  38300
-  can l  38302
- */
+lg  can  38300
+ can l  38302
+*/
 
 func main() {
 	flag.Parse()
-
 	/////
 	aliveTimer = time.Now()
 
 	lginfo.Init()
-
 	// parse server ip need valid
-	serverIp := net.ParseIP(server);
+	serverIp := net.ParseIP(server)
 	serverAdd := net.UDPAddr{
 		IP:   serverIp,
 		Port: 38302,
 	}
 
-	// 本机地址
-	hostIp := net.ParseIP(host)
-	hostAdd := net.UDPAddr{
-		IP:   hostIp,
-		Port: 38300,
-	}
-	// Can卡固定IP
-	canAddr := net.UDPAddr{
-		IP:   net.IPv4(192, 168, 1, 10),
-		Port: 8002,
-	}
 	lg, err := net.DialUDP("udp", nil, &serverAdd)
 	tool.CheckError(err)
-	can, err := net.DialUDP("udp", &hostAdd, &canAddr)
-	tool.CheckError(err)
+	zmq, err := nrpc.DialZmq("req", endpoint)
 
 	defer lg.Close()
-	defer can.Close()
 
 	//
-	go rpc.KeepAlive(lg)
-	go timeOutHandler();
-	go writeToVehicle(can)
-	//go read(can)
+	go nrpc.KeepAlive(lg)
+	go timeOutHandler()
+	go writeToVehicle(zmq)
 
 	buf := make([]byte, 12)
 	for {
@@ -124,21 +131,5 @@ func main() {
 		aliveTimer = time.Now()
 		// 反馈状态
 		lg.Write(lginfo.Pong(1))
-	}
-
-}
-
-// read can state
-func read(conn *net.UDPConn) {
-
-	buf := make([]byte, 13)
-	for {
-		_, err := conn.Read(buf)
-		if err != nil {
-			fmt.Print(err)
-			continue
-		}
-		// 读取can 状
-		fmt.Println(buf)
 	}
 }
