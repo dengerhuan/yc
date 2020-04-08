@@ -1,7 +1,6 @@
 package device
 
 import (
-	"../config"
 	"bytes"
 	"encoding/binary"
 	"encoding/json"
@@ -19,22 +18,27 @@ type LG struct {
 }
 
 var (
-	mu              sync.RWMutex
-	seq             int32
+	mu  sync.RWMutex
+	seq int32
+
 	streetingAction *Vehicle //横向
 	throttlebAtion  *Vehicle //纵向
-	smoothAtion     *Vehicle // 缓动
-	gearbuf         [13]byte
-	feedback        [6]byte // 0 init  1 res  2keeap  2 other
-	temporaryWheel  int32
+	SmoothAction    *Vehicle // 缓动
+	stopAction      *Vehicle //停车
+
+	feedback       [6]byte // 0 init  1 res  2keeap  2 other
+	temporaryWheel int32
 )
 
 func init() {
 	throttlebAtion.Action = "forward"
-	throttlebAtion.Value = 0
 
-	streetingAction.Action = "left"
-	streetingAction.Value = 0
+	streetingAction.Action = "right"
+
+	stopAction.Action = "stop"
+
+	SmoothAction.Action = "smooth"
+	SmoothAction.Value = 100
 }
 
 // DATA0=01/02/03/04 对应于PRND档位
@@ -118,43 +122,70 @@ func (lginfo *LG) DoThrottle() []byte {
 	defer mu.RUnlock()
 
 	/**
-	80 00对应0%   32768
-	86 66对应5%   34406
-	8C CC 对应10% 36044
-	99 99对应20%  39321
-	FFFF对应100%  65535
-	具体公式 (DATA23-HEX8000)*0.003=油门开度百分比
+	  255 对应0
 	*/
 
-	/**
-	65536-32768/100  约等于  0x147
+	acceleration := int16((255 - lginfo.Gas) * 4)
 
-	lginfo.gas * 0x147 +0x8000
-	*/
-
-	_gas := uint16(255-lginfo.Gas)*0x80 + 0x8000
-	if lginfo.Gas < config.MAXTHROTTLE {
-		_gas = 0xc000
+	if acceleration > 1000 {
+		acceleration = 1000
 	}
 
-	// fixed bug bread >0 then throttle =0
-	if lginfo.Ibreak < 255 {
-		_gas = 0x8000
+	switch lginfo.DoGear() {
+	// r
+	case 2:
+		acceleration = acceleration * -1
+		// d
+	case 4:
+
+	default:
+		acceleration = 0
+
 	}
 
-	slice := throttlebuf[:]
+	throttlebAtion.Value = acceleration
+	action, err := json.Marshal(streetingAction)
+	if err != nil {
+		log.Fatal(err)
+		return nil
+	}
+	return action
+}
 
-	slice[0] = 0x08
+// 0 缓动  1 急停 2 自由停
+/**
+刹车 没有数据时 返回 nil
+刹车到4/5 时 极停
+刹车到2/5 时 缓动
+轻踩刹车时 自由停
+*/
+func (lginfo *LG) DoBrake() []byte {
 
-	slice[3] = 0x03
-	slice[4] = 0xD6
+	mu.RLock()
+	defer mu.RUnlock()
+	iBbreak := 255 - lginfo.Ibreak
 
-	slice[6] = 0x1C
-	slice[7] = byte(_gas >> 8)
-	slice[8] = byte(_gas)
+	var stopMode int16
+	switch {
+	case iBbreak == 0:
+		return nil
+	case iBbreak > 200:
 
-	return slice
+		stopMode = 1
+	case iBbreak > 100:
+		stopMode = 0
+	default:
+		stopMode = 2
+	}
 
+	stopAction.Value = stopMode
+
+	action, err := json.Marshal(stopAction)
+	if err != nil {
+		log.Fatal(err)
+		return nil
+	}
+	return action
 }
 
 // 档位没变化是发 0
@@ -164,15 +195,13 @@ func (lginfo *LG) DoGear() int8 {
 	defer mu.RUnlock()
 
 	//送ID 501 DATA0=01/02/03/04
-
 	// DATA0=01/02/03/04 对应于P1 R2 N3 D4档位
-
-	switch lginfo.IGear {
-
 	// 0 N 3
 	// 64 R 2
 	// 1 4 16 // 1 3 5 -D 4
 	// 2 8 32 // 2 4 6 -P 1
+
+	switch lginfo.IGear {
 	case 0:
 		return 3
 	case 64:
@@ -184,5 +213,4 @@ func (lginfo *LG) DoGear() int8 {
 	default:
 		return 0
 	}
-
 }

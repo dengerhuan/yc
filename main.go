@@ -5,6 +5,7 @@ import (
 	"./device"
 	"./nrpc"
 	"./tool"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"net"
@@ -21,10 +22,68 @@ var (
 )
 
 func init() {
+
 	flag.StringVar(&host, "host", "192.168.1.100", "host ip")
 	flag.StringVar(&server, "server", "127.0.0.1", "remote server ip")
 	flag.IntVar(&port, "port", 38302, "remote server port")
 	flag.StringVar(&endpoint, "endpoint", "tcp://127.0.0.1:5556", "vehicle zmq endpoint")
+}
+
+/**
+
+lg  can  38300
+ can l  38302
+*/
+
+func main() {
+	flag.Parse()
+	aliveTimer = time.Now()
+	lginfo.Init()
+	// parse server ip need valid
+	serverIp := net.ParseIP(server)
+	serverAdd := net.UDPAddr{
+		IP:   serverIp,
+		Port: 38302,
+	}
+
+	lg, err := net.DialUDP("udp", nil, &serverAdd)
+	tool.CheckError(err)
+
+	zmq, err := nrpc.DialZmq("req", endpoint)
+	tool.CheckError(err)
+
+	defer lg.Close()
+	defer zmq.Destroy()
+
+	setSmooth(zmq)
+	//
+	go nrpc.KeepAlive(lg)
+	go timeOutHandler()
+	go writeToVehicle(zmq)
+
+	buf := make([]byte, 12)
+	for {
+		_, err := lg.Read(buf)
+		if err != nil {
+			fmt.Print(err)
+			continue
+		}
+
+		// 读取 状态
+		lginfo.ReadDriver(buf)
+		aliveTimer = time.Now()
+		// 反馈状态
+		lg.Write(lginfo.Pong(1))
+	}
+}
+
+/**
+当前缓动仅进行一次设置，可以尝试与其他动作一起发送到 vehicle 参考 writeToVehicle
+*/
+func setSmooth(conn *nrpc.Zmq) {
+	data, _ := json.Marshal(device.SmoothAction)
+	err := conn.SendAndReceive([][]byte{data})
+	tool.CheckError(err)
 }
 
 //  time out timer ==300
@@ -55,81 +114,26 @@ func writeToVehicle(conn *nrpc.Zmq) {
 		select {
 		case <-ticket:
 
-			conn.SendAndReceive([][]byte{})
+			// 横向
+			steering := lginfo.DoSteering()
 
-			// check gear
-			// check  flag
-			//
+			if steering != nil {
+				conn.SendAndReceive([][]byte{steering})
+			}
 
-			// 检查档位信息， 如果反馈nil 说明 档位没有变化
-			// 档位 返回 135  go forward do smooth
-			// 档位 返回 N 缓慢 停下
-			//  档位 返回 P 档 急停
-			//  横向控制 不受档位变化影响
+			// 油门
+			throttle := lginfo.DoThrottle()
+			if throttle != nil {
+				conn.SendAndReceive([][]byte{throttle})
+			}
 
-			// 纵向控制 收影响
-			// check gear {
-			//  go  them smooth
-			//  else
-			// nil go on
-			//}
-			//conn.Write(lginfo.DoSteering())
-			//
-			//if lginfo.Ibreak < 255 {
-			//	conn.Write(lginfo.DoBrake())
-			//}
-			//
-			//if lginfo.Gas < 255 {
-			//	conn.Write(lginfo.DoThrottle())
-			//}
+			// 刹车
 
-			//conn.Write(lginfo.DoGear())
+			ibreak := lginfo.DoBrake()
+			if ibreak != nil {
+				conn.SendAndReceive([][]byte{ibreak})
+			}
+
 		}
-	}
-}
-
-/**
-
-lg  can  38300
- can l  38302
-*/
-
-func main() {
-	flag.Parse()
-	/////
-	aliveTimer = time.Now()
-
-	lginfo.Init()
-	// parse server ip need valid
-	serverIp := net.ParseIP(server)
-	serverAdd := net.UDPAddr{
-		IP:   serverIp,
-		Port: 38302,
-	}
-
-	lg, err := net.DialUDP("udp", nil, &serverAdd)
-	tool.CheckError(err)
-	zmq, err := nrpc.DialZmq("req", endpoint)
-
-	defer lg.Close()
-
-	//
-	go nrpc.KeepAlive(lg)
-	go timeOutHandler()
-	go writeToVehicle(zmq)
-
-	buf := make([]byte, 12)
-	for {
-		_, err := lg.Read(buf)
-		if err != nil {
-			fmt.Print(err)
-			continue
-		}
-
-		// 读取 状态
-		lginfo.ReadDriver(buf)
-		aliveTimer = time.Now()
-		// 反馈状态
-		lg.Write(lginfo.Pong(1))
 	}
 }
