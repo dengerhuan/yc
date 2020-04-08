@@ -82,7 +82,7 @@ func main() {
 */
 func setSmooth(conn *nrpc.Zmq) {
 	data, _ := json.Marshal(device.SmoothAction)
-	err := conn.SendAndReceive([][]byte{data})
+	err := conn.SendAndReceiveFrame(data)
 	tool.CheckError(err)
 }
 
@@ -118,20 +118,19 @@ func writeToVehicle(conn *nrpc.Zmq) {
 			steering := lginfo.DoSteering()
 
 			if steering != nil {
-				conn.SendAndReceive([][]byte{steering})
+				conn.SendAndReceiveFrame(steering)
 			}
 
 			// 油门
 			throttle := lginfo.DoThrottle()
 			if throttle != nil {
-				conn.SendAndReceive([][]byte{throttle})
+				conn.SendAndReceiveFrame(throttle)
 			}
 
 			// 刹车
-
 			ibreak := lginfo.DoBrake()
 			if ibreak != nil {
-				conn.SendAndReceive([][]byte{ibreak})
+				conn.SendAndReceiveFrame(ibreak)
 			}
 
 		}

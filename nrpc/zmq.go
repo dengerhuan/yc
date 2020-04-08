@@ -49,6 +49,29 @@ func (zmq *Zmq) RecvMessage() ([][]byte, error) {
 	return reply, err
 }
 
+//
+
+//FlagNone
+func (zmq *Zmq) SendAndReceiveFrame(msg []byte) error {
+	err := zmq.sock.SendFrame(msg, 0)
+	if err != nil {
+		return err
+	}
+	_, _, err = zmq.sock.RecvFrame()
+	return err
+}
+
+func (zmq *Zmq) SendFrame(msg []byte) error {
+	return zmq.sock.SendFrame(msg, 0)
+}
+
+func (zmq *Zmq) RecvFrame() ([]byte, error) {
+	reply, _, err := zmq.sock.RecvFrame()
+	return reply, err
+}
+
+//
+
 func (zmq *Zmq) Destroy() {
 	zmq.sock.Destroy()
 }
