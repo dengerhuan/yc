@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/json"
-	"fmt"
 	"log"
 	"math"
 	"sync"
@@ -33,7 +32,7 @@ var (
 
 func init() {
 	throttlebAtion = &Vehicle{Action: "forward"}
-	streetingAction = &Vehicle{Action: "right"}
+	streetingAction = &Vehicle{Action: "left"}
 	stopAction = &Vehicle{Action: "stop"}
 	SmoothAction = &Vehicle{Action: "smooth", Value: 100}
 }
@@ -128,9 +127,7 @@ func (lginfo *LG) DoThrottle() []byte {
 		acceleration = 1000
 	}
 
-	fmt.Println(acceleration)
-	fmt.Println(lginfo.DoGear())
-	fmt.Println(255 - lginfo.Gas)
+
 
 	switch lginfo.DoGear() {
 	// r
