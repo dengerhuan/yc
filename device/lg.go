@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/json"
+	"fmt"
 	"log"
 	"math"
 	"sync"
@@ -121,11 +122,15 @@ func (lginfo *LG) DoThrottle() []byte {
 	  255 对应0
 	*/
 
-	acceleration := int16((255 - lginfo.Gas) * 4)
+	acceleration := int16((255 - lginfo.Gas)) * 4
 
 	if acceleration > 1000 {
 		acceleration = 1000
 	}
+
+	fmt.Println(acceleration)
+	fmt.Println(lginfo.DoGear())
+	fmt.Println(255 - lginfo.Gas)
 
 	switch lginfo.DoGear() {
 	// r
