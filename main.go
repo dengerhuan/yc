@@ -124,6 +124,10 @@ func writeToVehicle(conn *nrpc.Zmq) {
 			// 油门
 			throttle := lginfo.DoThrottle()
 			if throttle != nil {
+
+
+				fmt.Println(string(throttle))
+
 				conn.SendAndReceiveFrame(throttle)
 			}
 

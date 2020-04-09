@@ -136,11 +136,10 @@ func (lginfo *LG) DoThrottle() []byte {
 
 	default:
 		acceleration = 0
-
 	}
 
 	throttlebAtion.Value = acceleration
-	action, err := json.Marshal(streetingAction)
+	action, err := json.Marshal(throttlebAtion)
 	if err != nil {
 		log.Fatal(err)
 		return nil
