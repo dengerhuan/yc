@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"math"
 	"net"
 	"time"
 )
@@ -19,14 +20,19 @@ var (
 	port       int
 	server     string
 	endpoint   string
+	current_steering device.Vehicle
+	last_steering_value int16
+	change_steering_flag bool
 )
 
 func init() {
 
-	flag.StringVar(&host, "host", "192.168.1.100", "host ip")
-	flag.StringVar(&server, "server", "127.0.0.1", "remote server ip")
+	flag.StringVar(&host, "host", "192.168.56.101", "host ip")
+	flag.StringVar(&server, "server", "192.168.56.1", "remote server ip")
 	flag.IntVar(&port, "port", 38302, "remote server port")
 	flag.StringVar(&endpoint, "endpoint", "tcp://127.0.0.1:5555", "vehicle zmq endpoint")
+	last_steering_value = 0
+	change_steering_flag = false
 }
 
 /**
@@ -48,9 +54,15 @@ func main() {
 
 	lg, err := net.DialUDP("udp", nil, &serverAdd)
 	tool.CheckError(err)
+	if err == nil{
+		fmt.Println("UDP server connection successful")
+	}
 
 	zmq, err := nrpc.DialZmq("req", endpoint)
 	tool.CheckError(err)
+	if err == nil{
+		fmt.Println("ZMQ connection successful")
+	}
 
 	defer lg.Close()
 	defer zmq.Destroy()
@@ -63,6 +75,7 @@ func main() {
 
 	buf := make([]byte, 12)
 	for {
+		//fmt.Printf("received buffer : %x\n",buf)
 		_, err := lg.Read(buf)
 		if err != nil {
 			fmt.Print(err)
@@ -118,22 +131,35 @@ func writeToVehicle(conn *nrpc.Zmq) {
 			steering := lginfo.DoSteering()
 
 			if steering != nil {
-				conn.SendAndReceiveFrame(steering)
+				err := json.Unmarshal(steering,&current_steering)
+				if err != nil{
+					tool.CheckError(err)
+				}
+				if math.Abs(float64(current_steering.Value - last_steering_value)) > 100{
+					last_steering_value = current_steering.Value
+					fmt.Println(string(steering))
+					conn.SendAndReceiveFrame(steering)
+					change_steering_flag = true
+				}else{
+					change_steering_flag = false
+				}
+
 			}
 
 			// 油门
 			throttle := lginfo.DoThrottle()
 			if throttle != nil {
-
-
 				fmt.Println(string(throttle))
+				if change_steering_flag == false{
+					conn.SendAndReceiveFrame(throttle)
+				}
 
-				conn.SendAndReceiveFrame(throttle)
 			}
 
 			// 刹车
 			ibreak := lginfo.DoBrake()
 			if ibreak != nil {
+				fmt.Println(string(ibreak))
 				conn.SendAndReceiveFrame(ibreak)
 			}
 
