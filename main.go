@@ -14,14 +14,13 @@ import (
 )
 
 var (
-	lginfo     device.LG
-	aliveTimer time.Time
-	host       string
-	port       int
-	server     string
-	endpoint   string
-	current_steering device.Vehicle
-	last_steering_value int16
+	lginfo               device.LG
+	aliveTimer           time.Time
+	host                 string
+	port                 int
+	server               string
+	endpoint             string
+	current_steering     device.Vehicle
 	change_steering_flag bool
 )
 
@@ -31,7 +30,6 @@ func init() {
 	flag.StringVar(&server, "server", "192.168.56.1", "remote server ip")
 	flag.IntVar(&port, "port", 38302, "remote server port")
 	flag.StringVar(&endpoint, "endpoint", "tcp://127.0.0.1:5555", "vehicle zmq endpoint")
-	last_steering_value = 0
 	change_steering_flag = false
 }
 
@@ -54,13 +52,13 @@ func main() {
 
 	lg, err := net.DialUDP("udp", nil, &serverAdd)
 	tool.CheckError(err)
-	if err == nil{
+	if err == nil {
 		fmt.Println("UDP server connection successful")
 	}
 
 	zmq, err := nrpc.DialZmq("req", endpoint)
 	tool.CheckError(err)
-	if err == nil{
+	if err == nil {
 		fmt.Println("ZMQ connection successful")
 	}
 
@@ -131,16 +129,15 @@ func writeToVehicle(conn *nrpc.Zmq) {
 			steering := lginfo.DoSteering()
 
 			if steering != nil {
-				err := json.Unmarshal(steering,&current_steering)
-				if err != nil{
+				err := json.Unmarshal(steering, &current_steering)
+				if err != nil {
 					tool.CheckError(err)
 				}
-				if math.Abs(float64(current_steering.Value - last_steering_value)) > 100{
-					last_steering_value = current_steering.Value
+				if math.Abs(float64(current_steering.Value)) > 100 {
 					fmt.Println(string(steering))
 					conn.SendAndReceiveFrame(steering)
 					change_steering_flag = true
-				}else{
+				} else {
 					change_steering_flag = false
 				}
 
@@ -150,7 +147,7 @@ func writeToVehicle(conn *nrpc.Zmq) {
 			throttle := lginfo.DoThrottle()
 			if throttle != nil {
 				fmt.Println(string(throttle))
-				if change_steering_flag == false{
+				if change_steering_flag == false {
 					conn.SendAndReceiveFrame(throttle)
 				}
 
